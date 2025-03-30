@@ -2,6 +2,8 @@
 
 **GitTopo** is an interactive 3D visualization tool that transforms your GitHub contribution graph into a rotating topographical map. Built with Three.js, it offers a sleek dark/light theme toggle, dynamic color gradients, tooltips, and the ability to export your map as a PNG. Explore your coding activity like never before!
 
+![GitTopo Logo](gittopo_logo.png)
+
 ## Features
 - **3D Topographical Map**: Visualize your GitHub contributions as a rotatable 3D surface.
 - **Color Gradients**: Contributions are color-coded from green (low activity) to red (high activity).
@@ -11,7 +13,9 @@
 - **Custom Input**: Enter any GitHub username to generate a personalized map.
 
 ## Demo
- 
+
+![Click to preview Demo](https://makalin.github.io/GitTopo/)
+
 For now, imagine a 3D grid where peaks represent your busiest coding days, smoothly rotating under your control.
 
 ## Installation
