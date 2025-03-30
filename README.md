@@ -14,7 +14,7 @@
 
 ## Demo
 
-!(https://makalin.github.io/GitTopo/)
+Click to view Demo: https://makalin.github.io/GitTopo/
 
 For now, imagine a 3D grid where peaks represent your busiest coding days, smoothly rotating under your control.
 
