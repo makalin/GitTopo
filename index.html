@@ -5,19 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GitTopo - GitHub Activity Map</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body>
+<body class="dark">
+    <div class="top-links">
+        <a href="https://github.com/makalin/GitTopo" target="_blank" title="GitHub Repository">
+            <i class="fab fa-github"></i>
+        </a>
+        <a href="README.md" title="Readme">
+            <i class="fas fa-book"></i>
+        </a>
+        <button id="theme-toggle" title="Toggle Theme">
+            <i class="fas fa-moon"></i>
+        </button>
+    </div>
     <div class="container">
         <h1>GitTopo</h1>
         <div class="controls">
             <input type="text" id="github-username" placeholder="Enter GitHub username">
+           
+            <select id="map-theme">
+                <option value="modern">Modern</option>
+                <option value="classic">Classic</option>
+                <option value="retro">80s Retro</option>
+                <option value="monochrome">Monochrome</option>
+                <option value="ocean">Ocean</option>
+            </select>
             <button onclick="fetchGitHubData()">Generate Map</button>
-            <button id="theme-toggle">Toggle Theme</button>
+           
         </div>
         <div id="scene-container"></div>
     </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.134.0/examples/js/controls/OrbitControls.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

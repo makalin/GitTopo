@@ -23,28 +23,45 @@ h1 {
 
 .controls {
     margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
-input, button {
+input, button, select {
     padding: 10px;
     font-size: 1em;
-    margin: 0 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    background-color: white;
+    color: #333;
 }
 
-button {
+/* Regular button styles */
+.controls button {
     background-color: #007bff;
     color: white;
     cursor: pointer;
     border: none;
+    min-width: 100px;
+    padding: 10px;
+    font-size: 1em;
+    border-radius: 5px;
 }
 
-button:hover {
+.controls button:hover {
     background-color: #0056b3;
 }
 
-body.dark input, body.dark button {
+select {
+    cursor: pointer;
+    min-width: 120px;
+}
+
+body.dark input, 
+body.dark button, 
+body.dark select {
     background-color: #333;
     color: #f0f0f0;
     border-color: #555;
@@ -54,7 +71,70 @@ body.dark button {
     background-color: #007bff;
 }
 
+body.dark select option {
+    background-color: #333;
+    color: #f0f0f0;
+}
+
 #scene-container {
     width: 100%;
     height: 80vh;
+}
+
+/* Dark mode styles for footer */
+body.dark-mode .footer-links a {
+    color: #4da6ff;
+}
+
+body.dark-mode .footer-links a:hover {
+    color: #80c1ff;
+}
+
+/* Top links styles */
+.top-links {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 15px;
+    z-index: 1000;
+}
+
+.top-links a, 
+#theme-toggle {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 24px;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 0;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border: none;
+    cursor: pointer;
+    margin: 0;
+    line-height: 1;
+    min-width: unset;
+}
+
+.top-links a:hover, 
+#theme-toggle:hover {
+    color: #0056b3;
+    transform: scale(1.1);
+}
+
+body.dark .top-links a, 
+body.dark #theme-toggle {
+    color: #4da6ff;
+    background: rgba(26, 26, 26, 0.9);
+}
+
+body.dark .top-links a:hover, 
+body.dark #theme-toggle:hover {
+    color: #80c1ff;
 }

@@ -2,6 +2,45 @@ let scene, camera, renderer, controls, mesh, raycaster, mouse;
 const container = document.getElementById('scene-container');
 const tooltip = document.createElement('div'); // Tooltip element
 
+// Theme configuration
+const themes = {
+    modern: {
+        colors: {
+            low: new THREE.Color(0x4CAF50),  // Green
+            high: new THREE.Color(0xFF5722)   // Orange
+        },
+        material: { flatShading: true, vertexColors: true }
+    },
+    classic: {
+        colors: {
+            low: new THREE.Color(0x2196F3),  // Blue
+            high: new THREE.Color(0xF44336)   // Red
+        },
+        material: { flatShading: false, vertexColors: true }
+    },
+    retro: {
+        colors: {
+            low: new THREE.Color(0xFFC107),  // Yellow
+            high: new THREE.Color(0x9C27B0)   // Purple
+        },
+        material: { flatShading: true, vertexColors: true }
+    },
+    monochrome: {
+        colors: {
+            low: new THREE.Color(0x9E9E9E),  // Grey
+            high: new THREE.Color(0x212121)   // Dark Grey
+        },
+        material: { flatShading: true, vertexColors: true }
+    },
+    ocean: {
+        colors: {
+            low: new THREE.Color(0x00BCD4),  // Cyan
+            high: new THREE.Color(0x1976D2)   // Blue
+        },
+        material: { flatShading: false, vertexColors: true }
+    }
+};
+
 function initScene() {
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
@@ -53,7 +92,7 @@ async function fetchGitHubData() {
         generateTopoMap(contributionData);
     } catch (error) {
         console.error('Error fetching data:', error);
-        alert('Couldn’t fetch data. Try again!');
+        alert("Couldn't fetch data. Try again!");
     }
 }
 
@@ -63,33 +102,33 @@ function generateTopoMap(data) {
 
     const geometry = new THREE.PlaneGeometry(52, 7, 51, 6);
     const positions = geometry.attributes.position.array;
-    const colors = new Float32Array(positions.length); // For vertex colors
+    const colors = new Float32Array(positions.length);
+
+    const selectedTheme = document.getElementById('map-theme').value;
+    const theme = themes[selectedTheme];
 
     // Adjust heights and colors based on contribution data
     for (let i = 0, j = 0; i < positions.length; i += 3, j++) {
         const x = Math.floor(j / 7);
         const y = j % 7;
         const value = data[x][y] || 0;
-        positions[i + 2] = value; // Z-axis (height)
+        positions[i + 2] = value;
 
-        // Color gradient: green (low) to red (high)
-        const color = new THREE.Color().setHSL(value / 10, 1, 0.5); // Hue from 0 (red) to 0.33 (green)
+        // Interpolate color based on theme
+        const color = new THREE.Color().lerpColors(
+            theme.colors.low,
+            theme.colors.high,
+            value / 10
+        );
         colors[i] = color.r;
         colors[i + 1] = color.g;
         colors[i + 2] = color.b;
-
-        // Store data for tooltips
-        geometry.attributes.position.array[i + 2] = value; // Reuse Z for simplicity
     }
 
     geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
     geometry.computeVertexNormals();
 
-    const material = new THREE.MeshPhongMaterial({ 
-        vertexColors: true, 
-        side: THREE.DoubleSide, 
-        flatShading: true 
-    });
+    const material = new THREE.MeshPhongMaterial(theme.material);
     mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
 
@@ -99,7 +138,7 @@ function generateTopoMap(data) {
     directionalLight.position.set(0, 1, 1);
     scene.add(directionalLight);
 
-    mesh.rotation.x = -Math.PI / 4; // Tilt for better view
+    mesh.rotation.x = -Math.PI / 4;
 }
 
 function onMouseMove(event) {
@@ -132,20 +171,45 @@ function exportMap() {
     link.click();
 }
 
-document.getElementById('theme-toggle').addEventListener('click', () => {
-    document.body.classList.toggle('dark');
-});
-
-const exportButton = document.createElement('button');
-exportButton.textContent = 'Export as PNG';
-exportButton.onclick = exportMap;
-document.querySelector('.controls').appendChild(exportButton);
-
-// Event listeners
-window.addEventListener('mousemove', onMouseMove, false);
+// Initialize the scene when the window loads
 window.onload = initScene;
+
+// Add event listeners after all functions are defined
 window.addEventListener('resize', () => {
     camera.aspect = container.clientWidth / container.clientHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(container.clientWidth, container.clientHeight);
 });
+
+window.addEventListener('mousemove', onMouseMove, false);
+
+// Theme toggle functionality
+const themeToggle = document.getElementById('theme-toggle');
+const themeIcon = themeToggle.querySelector('i');
+
+themeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark');
+    if (document.body.classList.contains('dark')) {
+        themeIcon.classList.remove('fa-sun');
+        themeIcon.classList.add('fa-moon');
+    } else {
+        themeIcon.classList.remove('fa-moon');
+        themeIcon.classList.add('fa-sun');
+    }
+});
+
+// Map theme change handler
+document.getElementById('map-theme').addEventListener('change', () => {
+    if (mesh) {
+        const username = document.getElementById('github-username').value;
+        if (username) {
+            fetchGitHubData();
+        }
+    }
+});
+
+// Add export button
+const exportButton = document.createElement('button');
+exportButton.textContent = 'Export as PNG';
+exportButton.onclick = exportMap;
+document.querySelector('.controls').appendChild(exportButton);
